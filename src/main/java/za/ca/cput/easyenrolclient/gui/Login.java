@@ -20,10 +20,7 @@ import javax.swing.border.LineBorder;
 import za.ca.cput.easyenrolclient.Client;
 import za.ca.cput.easyenrolclient.domain.Student;
 
-/**
- *
- * @author samuk
- */
+
 public class Login extends JFrame {
 
     private JLabel lblLogin, lblUsername, lblPassword;

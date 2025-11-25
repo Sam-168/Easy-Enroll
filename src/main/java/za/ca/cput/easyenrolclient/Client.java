@@ -18,10 +18,7 @@ import za.ca.cput.easyenrolclient.domain.Student;
 import za.ca.cput.easyenrolclient.domain.enrollment;
 import za.ca.cput.easyenrolclient.gui.Login;
 
-/**
- *
- * @author samuk
- */
+
 public class Client {
 
     private static Socket socket;

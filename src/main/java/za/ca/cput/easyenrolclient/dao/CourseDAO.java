@@ -10,10 +10,7 @@ import javax.swing.JOptionPane;
 import za.ca.cput.easyenrolclient.connection.DBConnection;
 import za.ca.cput.easyenrolclient.domain.Course;
 
-/**
- *
- *
- */
+
 public class CourseDAO {
 
     private Connection con;

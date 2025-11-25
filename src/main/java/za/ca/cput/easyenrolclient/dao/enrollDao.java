@@ -17,10 +17,7 @@ import za.ca.cput.easyenrolclient.domain.Course;
 import za.ca.cput.easyenrolclient.domain.Student;
 import za.ca.cput.easyenrolclient.domain.enrollment;
 
-/**
- *
- * @author 240971051
- */
+
 public class enrollDao {
 
     private Connection con;

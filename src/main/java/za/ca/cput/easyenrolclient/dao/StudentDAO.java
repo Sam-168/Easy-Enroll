@@ -10,10 +10,7 @@ import za.ca.cput.easyenrolclient.connection.DBConnection;
 
 import za.ca.cput.easyenrolclient.domain.Student;
 
-/**
- *
- *
- */
+
 public class StudentDAO {
 
     private Connection con;

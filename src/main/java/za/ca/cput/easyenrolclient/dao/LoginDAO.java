@@ -12,10 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import za.ca.cput.easyenrolclient.connection.DBConnection;
 
-/**
- *
- * @author samuk
- */
+
 public class LoginDAO {
 
     private Connection con;

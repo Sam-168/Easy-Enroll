@@ -21,10 +21,7 @@ import za.ca.cput.easyenrolclient.domain.Course;
 import za.ca.cput.easyenrolclient.domain.Student;
 import za.ca.cput.easyenrolclient.domain.enrollment;
 
-/**
- *
- * @author samuk
- */
+
 public class Server {
 
     private static ServerSocket listener;

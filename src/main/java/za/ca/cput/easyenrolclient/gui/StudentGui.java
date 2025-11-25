@@ -15,10 +15,7 @@ import za.ca.cput.easyenrolclient.dao.enrollDao;
 import za.ca.cput.easyenrolclient.domain.Course;
 import za.ca.cput.easyenrolclient.domain.enrollment;
 
-/**
- *
- * @author 240971051
- */
+
 public class StudentGui extends JFrame {
 
     private JLabel lbl, lbl2, lbl3;
