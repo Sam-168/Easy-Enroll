@@ -1,4 +1,5 @@
 Easy-Enroll 
+Video Demo: https://youtu.be/Es7J4dVga-E
 Project Overview
 
 Easy-Enroll is a comprehensive student enrollment management system built using Java, implementing core concepts of GUI development, JDBC database connectivity, and socket-based client-server architecture. The system allows students to browse available courses and enroll in them, while providing administrators with tools to manage both student accounts and course offerings. The application demonstrates a clear separation of concerns through its layered architecture, with distinct client and server components communicating over TCP sockets.
