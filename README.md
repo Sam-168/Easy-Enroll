@@ -1,48 +1,90 @@
-Easy-Enroll 
-Video Demo: https://youtu.be/Es7J4dVga-E
-Project Overview
+# Easy-Enroll Student Enrollment System
 
-Easy-Enroll is a comprehensive student enrollment management system built using Java, implementing core concepts of GUI development, JDBC database connectivity, and socket-based client-server architecture. The system allows students to browse available courses and enroll in them, while providing administrators with tools to manage both student accounts and course offerings. The application demonstrates a clear separation of concerns through its layered architecture, with distinct client and server components communicating over TCP sockets.
-The project was developed to showcase understanding of fundamental Java enterprise concepts such as object-oriented programming principles, network programming with sockets, database interaction through JDBC, and event-driven GUI development using Swing. The system handles user authentication, course enrollment with duplicate prevention, and administrative operations such as adding new students and courses to the system.
+**Easy-Enroll** is a Java-based student enrollment system with a **client-server architecture**, GUI interfaces, and database connectivity. It allows students to browse and enroll in courses and provides administrators with tools to manage students and course offerings.
 
-System Architecture
-Easy-Enroll follows a client-server architecture where the server acts as a central hub for all database operations and business logic, while clients connect remotely to perform their respective tasks. This design was chosen to centralize data access and provide better security by keeping database credentials on the server side only. The server listens on port 6666 and handles one client connection at a time, processing commands through a persistent connection that allows multiple operations without reconnecting.
-Communication between client and server is achieved through Java's ObjectOutputStream and ObjectInputStream, enabling seamless serialization and transmission of domain objects (Student, Course, and enrollment objects) across the network. The server implements a command-based protocol where the client sends string commands ("login", "enroll", "getCourses", etc.) followed by any necessary data objects, and the server responds with appropriate results or status messages.
+---
 
-Core Components
-Client-Side Components
+## 📋 Overview
 
-Client.java serves as the main client application and communication layer. It establishes a socket connection to the server, creates object streams for bidirectional communication, and provides static methods that the GUI classes can invoke to interact with the server. The decision to use static methods was made to maintain a single, shared connection across all GUI components, allowing the Login, StudentGui, and AdminGui classes to communicate with the server without passing around Client instances or creating multiple connections. The Client class handles all network communication, sending commands and serialized objects to the server and receiving responses that are then returned to the calling GUI components.
-Login.java implements the authentication interface where users enter their credentials. The GUI validates input to ensure both username and password fields are populated and that the username is a valid numeric ID. Upon successful authentication, the server returns either "student" or "admin", which determines which interface to display next. This single login point provides a unified entry to the system while maintaining role-based access control.
-StudentGui.java provides the interface for enrolled students to view available courses and enroll in them. The GUI uses a JTabbedPane to organize different views, displaying available courses in one tab and the student's enrolled courses in another. When a student selects courses and clicks the enroll button, the system checks for duplicates against courses already selected in the current session before sending the enrollment request to the server. This client-side duplicate checking provides immediate feedback to the user, though the database also enforces data integrity on the server side.
-AdminGui.java offers comprehensive administrative functionality through a tabbed interface. Administrators can add new students and courses to the system, view which courses a specific student is enrolled in, and see all students enrolled in a particular course. Each tab is dedicated to a specific administrative function, maintaining a clean and organized user experience. Input validation ensures all required fields are completed before submitting data to the server, and the GUI displays appropriate success or error messages based on server responses.
+The system demonstrates **core Java concepts**:
 
-Server-Side Components
-Server.java is the heart of the system, listening for client connections and processing incoming requests. The server's receiveData() method implements an infinite loop that continuously reads commands from the connected client and dispatches them to appropriate handler methods. This design enables persistent connections where clients can perform multiple operations without reconnecting, improving efficiency and user experience. Each handler method (handleLogin, handleEnrollment, handleAddStudent, etc.) processes the specific request by instantiating the appropriate DAO class, executing the operation, and sending the result back to the client.
+* GUI development with **Swing**
+* **JDBC** database connectivity
+* Socket-based **client-server communication**
+* Object-oriented design and modular code architecture
 
-Data Access Layer
-The Data Access Object (DAO) pattern is implemented through several specialized classes that handle all database interactions. LoginDAO.java manages authentication by querying both the Student and Admin tables to verify credentials. StudentDAO.java and CourseDAO.java handle adding new students and courses respectively, implementing duplicate checking before insertion to prevent database constraint violations. Both classes utilize try-with-resources statements to ensure proper cleanup of database resources, a design choice made after encountering resource leak issues during development that caused the application to fail after multiple operations.
-enrollDao.java manages course enrollments and implements batch processing for efficiency. When a student enrolls in multiple courses simultaneously, the Enrollment() method uses PreparedStatement's addBatch() functionality to execute all insertions in a single database round trip rather than individual insert statements. This significantly improves performance when processing multiple enrollments. The class also provides methods to retrieve a student's enrolled courses and to find all students enrolled in a specific course, supporting both student and administrative views.
+Students and administrators access the system via separate GUIs, communicating with a central server that handles business logic and database operations.
 
-Domain Model
-The domain package contains simple POJO (Plain Old Java Object) classes that represent the core entities in the system. Student.java, Course.java, and enrollment.java all implement Serializable to enable transmission over sockets. These classes follow standard JavaBean conventions with private fields, public getters and setters, and toString() methods for debugging. The enrollment class encapsulates a student ID and an ArrayList of Course objects, representing the many-to-many relationship between students and courses.
+---
 
-Database Connection
-DBConnection.java provides a centralized method for obtaining database connections using Apache Derby. All DAO classes instantiate their database connections through this class, ensuring consistent connection parameters across the application. The use of a dedicated connection class follows the Single Responsibility Principle and makes it easy to modify database configuration in one location if needed.
+## ✨ Key Features
 
-Design Decisions
-Several key design decisions shaped the final implementation of Easy-Enroll. The choice to use a command-based protocol over sockets provides flexibility and extensibility. Adding new operations requires simply adding a new case to the server's switch statement and implementing the corresponding handler method. String-based responses ("success", "failed", "duplicate") were chosen because they're easily serializable over sockets, provide clear feedback during development and testing, and allow the GUI layer to display specific, meaningful messages to users.
-The single-client design was intentional, as multithreading was outside the scope of the course curriculum. This allowed focus on correctly implementing socket programming, JDBC operations, and GUI integration without the added complexity of concurrent client handling. In a production environment with knowledge of Java's concurrent programming features, the server could be enhanced to use an ExecutorService with a thread pool to handle multiple simultaneous clients.
-Resource management through try-with-resources in DAO classes was implemented after experiencing resource leaks during testing. This automatic cleanup mechanism ensures that PreparedStatements, ResultSets, and other database resources are properly closed even when exceptions occur, preventing connection pool exhaustion and improving application stability.
+* **Client-Server Architecture** – Centralized server manages database operations and business logic
+* **Student Interface** – Browse courses and enroll with duplicate prevention
+* **Admin Interface** – Add students/courses, view enrollments, manage data
+* **Real-Time Communication** – Persistent TCP socket connections using ObjectInputStream/ObjectOutputStream
+* **Data Validation** – Input validation both client-side and server-side
+* **Layered Design** – GUI, client logic, server processing, and DAO layers separated for clarity
 
-Technologies Used
+---
 
-Java SE - Core programming language
-Java Swing - GUI framework for all user interfaces
-Java Sockets - Network communication between client and server
-JDBC - Database connectivity and SQL execution
-Apache Derby - Embedded relational database
-Object Serialization - For transmitting domain objects over the network
+## 🛠️ Technologies Used
 
-Future Enhancements
-With additional time and expanded knowledge, several improvements could be made to Easy-Enroll. Implementing multithreading would allow the server to handle multiple concurrent clients. Adding password hashing (BCrypt or similar) would improve security by protecting credentials in the database. Implementing a proper logging framework instead of printStackTrace() would aid in debugging and monitoring. Configuration files for database connection parameters and server port would improve deployment flexibility. Finally, comprehensive exception handling with specific error types would provide users with more informative feedback when operations fail.
+* **Java SE** – Core programming language
+* **Java Swing** – GUI interfaces
+* **Java Sockets** – Network communication
+* **JDBC** – Database connectivity
+* **Apache Derby** – Embedded relational database
+* **Object Serialization** – Transmitting domain objects (Student, Course, Enrollment) over network
+
+---
+
+## ⚙️ System Architecture
+
+### Client-Side
+
+* **Client.java** – Handles socket connections and object streams, shared across GUI components
+* **Login.java** – Authentication interface, role-based access
+* **StudentGui.java** – Enroll in courses and view current enrollments
+* **AdminGui.java** – Manage students, courses, and view enrollment information
+
+### Server-Side
+
+* **Server.java** – Processes client commands and coordinates DAO operations
+* Command-based protocol (`login`, `enroll`, `getCourses`, etc.)
+* Persistent connections allow multiple operations per session
+
+### Data Access Layer (DAO)
+
+* **LoginDAO.java** – Authentication
+* **StudentDAO.java** / **CourseDAO.java** – Add and manage students/courses, prevent duplicates
+* **EnrollDAO.java** – Handles course enrollments, batch processing for efficiency
+* **DBConnection.java** – Centralized database connection management
+
+### Domain Model
+
+* **Student.java, Course.java, Enrollment.java** – Serializable POJOs representing core entities
+* Encapsulates relationships and supports transmission over sockets
+
+---
+
+## 🎯 Key Learning Outcomes
+
+* Implementation of a **client-server system** with sockets
+* Building **interactive GUIs** with Swing
+* Database operations using **JDBC** with proper resource management
+* Serialization and network object transmission
+* Modular and layered architecture for maintainable code
+
+---
+
+## 🚀 Future Enhancements
+
+* **Multithreading** – Allow multiple simultaneous client connections
+* **Logging Framework** – Replace print statements with structured logging
+* **Configurable Parameters** – Database and server settings via external files
+* **Enhanced Error Handling** – Specific error messages and exception management
+
+---
+
+*Built with **Java**, **Swing**, **JDBC**, and **Apache Derby***
